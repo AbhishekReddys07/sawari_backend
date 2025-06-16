@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Signup Page</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f7f8fc;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .container {
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 400px;
+    }
+    .title {
+      text-align: center;
+      font-size: 26px;
+      font-weight: 700;
+      color: #333;
+      margin-bottom: 30px;
+    }
+    input[type="text"],
+    input[type="email"],
+    input[type="password"] {
+      width: 100%;
+      padding: 14px;
+      margin-bottom: 15px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 14px;
+    }
+    .button {
+      background-color: #3f51b5;
+      color: white;
+      padding: 14px;
+      border: none;
+      border-radius: 8px;
+      width: 100%;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    .footerText {
+      margin-top: 20px;
+      text-align: center;
+      color: #666;
+    }
+    .link {
+      color: #3f51b5;
+      font-weight: 600;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="title">Create an Account</div>
+
+    <input type="text" id="name" placeholder="Full Name" />
+    <input type="email" id="email" placeholder="Email Address" />
+    <input type="password" id="password" placeholder="Password" />
+
+    <button class="button" onclick="handleSignup()">Sign Up</button>
+
+    <div class="footerText">
+      Already have an account? <span class="link">Log in</span>
+    </div>
+  </div>
+
+  <script>
+    function handleSignup() {
+      const name = document.getElementById("name").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
+
+      if (!name || !email || !password) {
+        alert("Please fill in all fields.");
+        return;
+      }
+
+      console.log({ name, email, password });
+
+      alert(`Signup Successful. Welcome, ${name}!`);
+
+      // You can use fetch() here to call your Spring Boot backend
+      // Example:
+      fetch('/api/auth/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, password })
+      });
+    }
+  </script>
+</body>
+</html>
