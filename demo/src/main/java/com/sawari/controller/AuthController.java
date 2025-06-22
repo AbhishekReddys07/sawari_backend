@@ -1,15 +1,11 @@
 package com.sawari.controller;
 
+import com.sawari.DTO.UserSignupDTO;
+import com.sawari.DTO.UserLoginDTO;
+import com.sawari.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.sawari.DTO.UserSignupDTO;
-import com.sawari.service.UserService;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
@@ -20,9 +16,11 @@ public class AuthController {
 
     @PostMapping("/signup")
     public ResponseEntity<String> signup(@RequestBody UserSignupDTO dto) {
-        String result = userService.registerUser(dto);
-        return ResponseEntity.ok(result);
+        return ResponseEntity.ok(userService.registerUser(dto));
     }
-    
-    
+
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestBody UserLoginDTO dto) {
+        return ResponseEntity.ok(userService.loginUser(dto));
+    }
 }

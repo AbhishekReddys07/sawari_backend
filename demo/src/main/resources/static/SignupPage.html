@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Signup Page</title>
+  <title>Sign Up - MyLibrary</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -20,14 +20,14 @@
       border-radius: 10px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
       width: 100%;
-      max-width: 400px;
+      max-width: 420px;
     }
     .title {
       text-align: center;
       font-size: 26px;
       font-weight: 700;
       color: #333;
-      margin-bottom: 30px;
+      margin-bottom: 25px;
     }
     input[type="text"],
     input[type="email"],
@@ -61,45 +61,98 @@
       font-weight: 600;
       cursor: pointer;
     }
+    .rules {
+      margin-top: 20px;
+      font-size: 14px;
+      color: #444;
+    }
+    .rules li {
+      margin-left: 20px;
+      margin-top: 5px;
+    }
   </style>
 </head>
 <body>
   <div class="container">
-    <div class="title">Create an Account</div>
+    <div class="title">Create Your Library Account</div>
+    
+    <form id="signupForm">
+      <input type="text" id="name" name="name" placeholder="Full Name" required />
+      <input type="email" id="email" name="email" placeholder="Email Address" required />
+      <input type="text" id="username" name="username" placeholder="Username" required />
+      <input type="password" id="password" name="password" placeholder="Password" required />
+      <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm Password" required />
 
-    <input type="text" id="name" placeholder="Full Name" />
-    <input type="email" id="email" placeholder="Email Address" />
-    <input type="password" id="password" placeholder="Password" />
-
-    <button class="button" onclick="handleSignup()">Sign Up</button>
+      <button type="submit" class="button">Sign Up</button>
+    </form>
 
     <div class="footerText">
-      Already have an account? <span class="link">Log in</span>
+      Already have an account? <span class="link" onclick="redirectToLogin()">Log in</span>
+    </div>
+
+    <div class="rules">
+      <p><strong>Password must contain:</strong></p>
+      <ul>
+        <li>At least 8 characters</li>
+        <li>One uppercase letter</li>
+        <li>One lowercase letter</li>
+        <li>One number</li>
+        <li>One special character</li>
+      </ul>
     </div>
   </div>
 
   <script>
-    function handleSignup() {
-      const name = document.getElementById("name").value.trim();
-      const email = document.getElementById("email").value.trim();
-      const password = document.getElementById("password").value.trim();
+    document.getElementById('signupForm').addEventListener('submit', async function(event) {
+      event.preventDefault();
 
-      if (!name || !email || !password) {
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value.trim();
+      const confirmPassword = document.getElementById('confirmPassword').value.trim();
+
+      if (!name || !email || !username || !password || !confirmPassword) {
         alert("Please fill in all fields.");
         return;
       }
 
-      console.log({ name, email, password });
+      if (password !== confirmPassword) {
+        alert("Passwords do not match.");
+        return;
+      }
 
-      alert(`Signup Successful. Welcome, ${name}!`);
+      const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+      if (!passwordRegex.test(password)) {
+        alert("Password does not meet strength requirements.");
+        return;
+      }
 
-      // You can use fetch() here to call your Spring Boot backend
-      // Example:
-      // fetch('/api/auth/signup', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({ name, email, password })
-      // });
+      const payload = { name, email, username, password };
+
+      try {
+        const response = await fetch('/auth/signup', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(payload)
+        });
+
+        if (response.ok) {
+          alert("Signup successful!");
+          window.location.href = "/login.html"; // redirect if needed
+        } else {
+          const data = await response.json();
+          alert("Signup failed: " + (data.message || response.statusText));
+        }
+      } catch (error) {
+        alert("Error occurred: " + error.message);
+      }
+    });
+
+    function redirectToLogin() {
+      window.location.href = "login.html";
     }
   </script>
 </body>

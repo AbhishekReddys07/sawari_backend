@@ -10,4 +10,9 @@ public class WebController {
     public String signupPage() {
         return "SignupPage"; // This should map to src/main/resources/templates/SignupPage.html
     }
+    
+    @GetMapping("/login")
+    public String login() {
+    	return "Login";
+    }
 }
