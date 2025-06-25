@@ -21,6 +21,7 @@ public class SecurityConfig {
                     "/signup",          // sign-up page
                     "/auth/signup",
                     "/SignuoPage.html",// sign-up POST endpoint
+                    "/welcome.html",
                     "/css/**", "/js/**", "/images/**" // static resources
                 ).permitAll()
                 .anyRequest().authenticated()

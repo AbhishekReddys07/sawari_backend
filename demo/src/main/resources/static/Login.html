@@ -1,9 +1,10 @@
+<!-- login.html (final working version) -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Login - MyLibrary</title>
+  <title>Login</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -59,8 +60,7 @@
 <body>
   <div class="container">
     <div class="title">Login to MyLibrary</div>
-
-    <input type="text" id="username" placeholder="Username" required />
+    <input type="text" id="email" placeholder="Email" required />
     <input type="password" id="password" placeholder="Password" required />
     <button class="button" onclick="handleLogin()">Login</button>
 
@@ -69,31 +69,42 @@
     </div>
   </div>
 
-  <script>
-    async function handleLogin() {
-      const username = document.getElementById("username").value.trim();
-      const password = document.getElementById("password").value.trim();
+<script>
+  async function handleLogin() {
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value.trim();
 
-      if (!username || !password) {
-        alert("Please enter both username and password.");
-        return;
-      }
+    if (!email || !password) {
+      alert("Please enter both email and password.");
+      return;
+    }
 
-      const response = await fetch("/api/auth/login", {
+    try {
+      const response = await fetch("/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password })
+        body: JSON.stringify({ email, password })
       });
 
-      const message = await response.text();
-
-      if (response.ok) {
-        alert(message);
-        // Redirect or store token/session here
+      const contentType = response.headers.get("content-type");
+      let data;
+      if (contentType && contentType.includes("application/json")) {
+        data = await response.json();
       } else {
-        alert("Login failed: " + message);
+        const text = await response.text();
+        throw new Error("Unexpected server response: " + text);
       }
+
+      if (response.ok && data.status === "success") {
+        alert("Login successful!");
+        window.location.href = "/welcome.html";
+      } else {
+        alert("Login failed: " + (data.message || "Invalid credentials"));
+      }
+    } catch (error) {
+      alert("Error: " + error.message);
     }
-  </script>
+  }
+</script>
 </body>
 </html>

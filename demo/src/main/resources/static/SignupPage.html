@@ -128,7 +128,13 @@
         return;
       }
 
-      const payload = { name, email, username, password };
+      const payload = {
+    		  name,
+    		  email,
+    		  username,
+    		  password,
+    		  confirmPassword
+    		};
 
       try {
         const response = await fetch('/auth/signup', {

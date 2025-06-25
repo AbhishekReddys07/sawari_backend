@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
@@ -15,12 +17,12 @@ public class AuthController {
     private UserService userService;
 
     @PostMapping("/signup")
-    public ResponseEntity<String> signup(@RequestBody UserSignupDTO dto) {
+    public ResponseEntity<Map<String, Object>> signup(@RequestBody UserSignupDTO dto) {
         return ResponseEntity.ok(userService.registerUser(dto));
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody UserLoginDTO dto) {
+    public ResponseEntity<Map<String, Object>> login(@RequestBody UserLoginDTO dto) {
         return ResponseEntity.ok(userService.loginUser(dto));
     }
 }

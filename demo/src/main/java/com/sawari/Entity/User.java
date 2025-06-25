@@ -3,29 +3,38 @@ package com.sawari.Entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "Login")
-public class UserLogin {
+@Table(name = "users")
+public class User {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	private String name;
+
+	@Column(unique = true, nullable = false)
 	private String email;
 
-	@Column(unique = true)
+	@Column(unique = true, nullable = false)
 	private String username;
 
+	@Column(nullable = false)
 	private String password;
-	
-	//getter and setters
 
-	public Long getId() {
-		return id;
+	// Constructors
+	public User() {
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public User(String name, String email, String username, String password) {
+		this.name = name;
+		this.email = email;
+		this.username = username;
+		this.password = password;
+	}
+
+	// Getters and Setters
+	public Long getId() {
+		return id;
 	}
 
 	public String getName() {
@@ -59,5 +68,4 @@ public class UserLogin {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-
 }
